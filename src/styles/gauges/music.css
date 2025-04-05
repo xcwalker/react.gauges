@@ -1,0 +1,111 @@
+/* music gauge */
+.music {
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.music .background {
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  filter: blur(15px) brightness(0.5);
+}
+
+.music .image {
+  /* sizing */
+  --_size: 200px;
+  width: var(--_size);
+  height: var(--_size);
+
+  /* styling */
+  border-radius: 0.5rem;
+
+  object-fit: cover;
+}
+
+.music .info {
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.music .info .title {
+  /* text */
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.music .info .artist {
+  /* text */
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.music .progress {
+  /* grid */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.music .progress .bar {
+  --_percentage: calc(var(--_position) / var(--_duration) * 100%);
+  /* position */
+  position: relative;
+  z-index: 1;
+
+  /* sizing */
+  width: 250px;
+  height: 0.25rem;
+  grid-column: span 2;
+
+  /* styling */
+  border-radius: 0.5rem;
+  background-color: white;
+}
+.music .progress .bar::before {
+  /* content */
+  content: "";
+
+  /* position */
+  position: absolute;
+  inset: 0;
+  right: auto;
+  z-index: -1;
+
+  /* sizing */
+  width: var(--_percentage);
+  height: 100%;
+
+  /* styling */
+  border-radius: inherit;
+  background-color: red;
+}
+
+.music .progress .position,
+.music .progress .duration {
+  /* text */
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.music .progress .duration {
+  /* text */
+  text-align: right;
+}

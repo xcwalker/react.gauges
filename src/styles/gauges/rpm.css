@@ -1,0 +1,182 @@
+.rpm {
+  background: rgb(0, 0, 0);
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(9, 9, 121, 1) 40%,
+    rgba(0, 0, 0, 1) 74%
+  );
+}
+
+.rpm .minorTicks,
+.rpm .majorTicks {
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+
+  /* grid */
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 0.5rem;
+  transform-origin: center;
+  pointer-events: none;
+
+  /* styling */
+  transform: rotate(-45deg);
+}
+
+.rpm .minorTicks > *,
+.rpm .majorTicks > * {
+  grid-column: 1;
+  grid-row: 1;
+
+  /* sizing */
+  --_padding: 1.25rem;
+  width: calc(100% - var(--_padding));
+  padding-left: var(--_padding);
+}
+
+.rpm .majorTicks > * {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.rpm .minorTicks > * span,
+.rpm .majorTicks > * span {
+  position: relative;
+  z-index: 999;
+
+  display: block;
+
+  /* sizing */
+  width: fit-content;
+  height: fit-content;
+}
+
+.rpm .minorTicks > * .tick,
+.rpm .majorTicks > * .tick {
+  /* position */
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+
+  /* sizing */
+  width: 0.5rem;
+  height: 1px;
+
+  /* styling */
+  background-color: rgb(197, 197, 197);
+}
+
+.rpm .majorTicks > * .tick {
+  /* sizing */
+  width: 0.75rem;
+  height: 2px;
+
+  /* styling */
+  background-color: white;
+}
+
+.rpm .minorTicks > * .tick.redline,
+.rpm .majorTicks > * .tick.redline {
+  /* styling */
+  background-color: red;
+}
+
+.rpm .majorTicks > *.redline span {
+  /* styling */
+  color: red;
+}
+
+.rpm .needle {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1;
+  transform-origin: center;
+
+  /* sizing */
+  width: 100%;
+
+  /* transition */
+  transition: transform 25ms ease-in-out;
+}
+
+.rpm .needle::after {
+  /* content */
+  content: "";
+
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  /* sizing */
+  width: 125px;
+  height: 4px;
+
+  /* styling */
+  background-color: red;
+}
+
+.rpm .rpmometer {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1;
+
+  /* sizing */
+  --_size: 200px;
+  width: var(--_size);
+  height: var(--_size);
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+
+  /* styling */
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid white;
+}
+
+.rpm .rpmometer .value {
+  /* text */
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+}
+
+.rpm .rpmometer .unit {
+  /* position */
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  /* text */
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  text-transform: uppercase;
+}

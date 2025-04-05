@@ -1,0 +1,184 @@
+.speed {
+  background: rgb(0, 0, 0);
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(9, 9, 121, 1) 40%,
+    rgba(0, 0, 0, 1) 74%
+  );
+}
+
+.speed .veryMinorTicks,
+.speed .minorTicks,
+.speed .majorTicks {
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+
+  /* grid */
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 0.5rem;
+  transform-origin: center;
+  pointer-events: none;
+
+  /* styling */
+  transform: rotate(-45deg);
+}
+
+.speed .veryMinorTicks > *,
+.speed .minorTicks > *,
+.speed .majorTicks > * {
+  grid-column: 1;
+  grid-row: 1;
+
+  /* sizing */
+  --_padding: 1.25rem;
+  width: calc(100% - var(--_padding));
+  padding-left: var(--_padding);
+}
+
+.speed .majorTicks > * {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.speed .veryMinorTicks > * span,
+.speed .minorTicks > * span,
+.speed .majorTicks > * span {
+  position: relative;
+  z-index: 999;
+
+  display: block;
+
+  /* sizing */
+  width: fit-content;
+  height: fit-content;
+}
+
+.speed .veryMinorTicks > * .tick,
+.speed .minorTicks > * .tick,
+.speed .majorTicks > * .tick {
+  /* position */
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+
+  /* sizing */
+  width: 0.25rem;
+  height: 1px;
+
+  /* styling */
+  background-color: rgb(141, 141, 141);
+}
+
+.speed .minorTicks > * .tick {
+  /* sizing */
+  width: 0.5rem;
+  height: 1px;
+
+  /* styling */
+  background-color: rgb(220, 220, 220);
+}
+
+.speed .majorTicks > * .tick {
+  /* sizing */
+  width: 0.75rem;
+  height: 2px;
+
+  /* styling */
+  background-color: white;
+}
+
+.speed .needle {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1;
+  transform-origin: center;
+
+  /* sizing */
+  width: 100%;
+
+  /* transition */
+  transition: transform 25ms ease-in-out;
+}
+
+.speed .needle::after {
+  /* content */
+  content: "";
+
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  /* sizing */
+  width: 150px;
+  height: 4px;
+
+  /* styling */
+  background-color: red;
+}
+
+.speed .speedometer {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1;
+
+  /* sizing */
+  --_size: 200px;
+  width: var(--_size);
+  height: var(--_size);
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+
+  /* styling */
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid white;
+}
+
+.speed .speedometer .value {
+  /* text */
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+}
+
+.speed .speedometer .unit {
+  /* position */
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  /* text */
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  text-transform: uppercase;
+}
