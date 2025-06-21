@@ -12,6 +12,8 @@
   background-color: black;
   overflow: hidden;
   pointer-events: none;
+
+  --_accent: rgba(9, 9, 121, 1);
 }
 
 .gauge > * {

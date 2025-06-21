@@ -1,8 +1,25 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "../../styles/gauges/speed.css";
+import "../../styles/gauges/speed_night.css";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  fuelAtom,
+  speedAtom,
+  speedCruiseActiveAtom,
+  speedCruiseAtom,
+  speedCruiseEnableAtom,
+  speedLimitAtom,
+  speedSettingsAtom,
+} from "../../Gauge";
 
-export function SpeedGauge(props: { current: boolean }) {
-  const [speed, setSpeed] = useState(40);
+export function SpeedGauge(props: { current: boolean; mode?: string }) {
+  const [speed, setSpeed] = useAtom(speedAtom);
+  const speedSettings = useAtomValue(speedSettingsAtom);
+  const speedLimit = useAtomValue(speedLimitAtom);
+  const speedCruise = useAtomValue(speedCruiseAtom);
+  const speedCruiseEnabled = useAtomValue(speedCruiseEnableAtom);
+  const speedCruiseActive = useAtomValue(speedCruiseActiveAtom);
+  const fuel = useAtomValue(fuelAtom);
   const [maxSpeed, setMaxSpeed] = useState(0);
   const [prevSpeed, setPrevSpeed] = useState(0);
   const MajorTickRate = 10;
@@ -30,78 +47,118 @@ export function SpeedGauge(props: { current: boolean }) {
       await new Promise((resolve) => setTimeout(resolve, 10));
     }
     handleSpeedChange(0);
-  }
+  };
 
   return (
     <div
-      className={"speed " + (props.current ? "current" : "")}
+      className={
+        "speed" +
+        (props.current ? " current" : "") +
+        (props.mode === "night" ? " night" : "")
+      }
       onClick={sweepStart}
     >
-      <div className="veryMinorTicks">
-        {Array.from({ length: MaxDialSpeed / VeryMinorTickRate }, (_, i) => {
-          const angle = ((i * VeryMinorTickRate) / MaxDialSpeed) * MaxDialAngle;
-          if ((i * VeryMinorTickRate) % MinorTickRate === 0) return null; // Skip numbers matching the major ticks
-          if ((i * VeryMinorTickRate) % MajorTickRate === 0) return null; // Skip numbers matching the major ticks
+      <div className="ticks">
+        {Array.from(
+          { length: MaxDialSpeed / VeryMinorTickRate + 1 },
+          (_, i) => {
+            const angle =
+              ((i * VeryMinorTickRate) / MaxDialSpeed) * MaxDialAngle;
 
-          return (
-            <div
-              key={i}
-              className="minorTick"
-              style={{
-                transform: `rotate(${angle}deg)`,
-              }}
-            >
-              <div className="tick" />
-            </div>
-          );
-        })}
-      </div>
-      <div className="minorTicks">
-        {Array.from({ length: MaxDialSpeed / MinorTickRate }, (_, i) => {
-          const angle = ((i * MinorTickRate) / MaxDialSpeed) * MaxDialAngle;
-          if ((i * MinorTickRate) % MajorTickRate === 0) return null; // Skip numbers matching the major ticks
-          return (
-            <div
-              key={i}
-              className="minorTick"
-              style={{
-                transform: `rotate(${angle}deg)`,
-              }}
-            >
-              <span
+            const isMinorTick = (i * VeryMinorTickRate) % MinorTickRate === 0;
+            const isMajorTick = (i * VeryMinorTickRate) % MajorTickRate === 0;
+
+            const isVisible = i < Math.ceil((Math.max(speed, speedCruise ? speedCruise : 0) + 1) / 5) * 5 + 1 || i < 31;
+
+            return (
+              <div
+                key={i}
+                className={
+                  "veryMinorTick" +
+                  (isMinorTick ? " minorTick" : "") +
+                  (isMajorTick ? " majorTick" : "") +
+                  (isVisible ? " visible" : "")
+                }
                 style={{
-                  transform: `rotate(${-angle + 45}deg)`,
+                  transform: `rotate(${angle}deg)`,
                 }}
               >
-                {i * MinorTickRate}
-              </span>
-              <div className="tick" />
-            </div>
-          );
-        })}
-      </div>
-      <div className="majorTicks">
-        {Array.from({ length: MaxDialSpeed / MajorTickRate + 1 }, (_, i) => {
-          const angle = ((i * MajorTickRate) / MaxDialSpeed) * MaxDialAngle;
-          return (
-            <div
-              key={i}
-              className="majorTick"
-              style={{ transform: `rotate(${angle}deg)` }}
-            >
-              <span style={{ transform: `rotate(${-angle + 45}deg)` }}>
-                {i * MajorTickRate}
-              </span>
-              <div className="tick" />
-            </div>
-          );
-        })}
+                {(isMajorTick || isMinorTick) && (
+                  <span
+                    className={
+                      "tickLabel" +
+                      (isMajorTick ? " majorTickLabel" : " minorTickLabel") +
+                      (isVisible ? " visible" : "")
+                    }
+                    style={{
+                      transform: `rotate(${-angle + 45}deg) scale(${
+                        speedSettings.scaleTickLabels
+                          ? Math.min(
+                              1 +
+                                Math.max(
+                                  0,
+                                  1 -
+                                    Math.abs(speed - i * VeryMinorTickRate) / 5
+                                ) *
+                                  0.5,
+                              1.5
+                            )
+                          : 1
+                      })`,
+                    }}
+                  >
+                    {i * VeryMinorTickRate}
+                  </span>
+                )}
+                <div className="tick" />
+              </div>
+            );
+          }
+        )}
       </div>
       <div
         className="needle"
         style={{
           transform: `rotate(${(speed / MaxDialSpeed) * MaxDialAngle - 45}deg)`,
         }}
+      />
+      <div
+        className="cruiseIndicator"
+        style={
+          {
+            transform: `rotate(${
+              ((speedCruise ? speedCruise : 0) / MaxDialSpeed) * MaxDialAngle -
+              45
+            }deg)`,
+            "--_background":
+              (speedCruise ? speedCruise : 0) >= speed
+                ? props.mode !== "night"
+                  ? "white"
+                  : "darkred"
+                : "red",
+            opacity:
+              speedCruise && speedCruiseActive && speedCruiseEnabled ? 1 : 0,
+          } as React.CSSProperties
+        }
+      />
+      <div
+        className="cruiseArcFromNeedle"
+        style={
+          {
+            "--_currentSpeed": speed,
+            "--_speedCruise": speedCruise ? speedCruise : 0,
+            "--_maxSpeed": MaxDialSpeed,
+            "--_maxGaugeAngle": MaxDialAngle,
+            background:
+              (speedCruise ? speedCruise : 0) > speed
+                ? props.mode !== "night"
+                  ? "white"
+                  : "darkred"
+                : "red",
+            opacity:
+              speedCruise && speedCruiseActive && speedCruiseEnabled ? 1 : 0,
+          } as React.CSSProperties
+        }
       />
       <div
         className="maxNeedle"
@@ -123,6 +180,64 @@ export function SpeedGauge(props: { current: boolean }) {
       <div className="speedometer">
         <span className="value">{speed}</span>
         <span className="unit">mph</span>
+        <div className={`limit ${speed > speedLimit ? "over" : ""}`}>
+          {speedLimit}
+        </div>
+        <div
+          className={`cruise ${speedCruiseEnabled ? "enabled" : ""} ${
+            speedCruiseActive && speedCruise ? "active" : ""
+          }`}
+        >
+          {speedCruise ? speedCruise : "C"}
+        </div>
+      </div>
+
+      <div className="fuel">
+        {Array.from({ length: 20 + 1 }, (_, i) => {
+          const angle = (i / 20) * 50;
+          const isMajorTick = i % 5 === 0; // Skip numbers matching the major ticks
+
+          const isVisible = i < Math.ceil((fuel + 1) / 25) * 5 + 1 || i < 5;
+
+          return (
+            <div
+              key={i}
+              className={
+                (isMajorTick ? "majorTick" : "minorTick") +
+                (isVisible ? " visible" : "")
+              }
+              style={{
+                transform: `rotate(${angle}deg)`,
+              }}
+            >
+              {isMajorTick && (
+                <span
+                  className={"tickLabel"}
+                  style={{
+                    transform: `rotate(${-angle + 115}deg)`,
+                  }}
+                >
+                  {i / 5}/4
+                </span>
+              )}
+              <div className="tick" />
+            </div>
+          );
+        })}
+        <div
+          className="indicatorArc"
+          style={
+            {
+              "--_fuel-level": fuel,
+              background:
+                fuel > 15
+                  ? props.mode !== "night"
+                    ? "white"
+                    : "darkred"
+                  : "red",
+            } as React.CSSProperties
+          }
+        />
       </div>
     </div>
   );

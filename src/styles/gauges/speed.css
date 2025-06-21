@@ -3,14 +3,13 @@
   background: radial-gradient(
     circle,
     rgba(0, 0, 0, 1) 0%,
-    rgba(9, 9, 121, 1) 40%,
+    var(--_accent) 40%,
     rgba(0, 0, 0, 1) 74%
   );
 }
 
-.speed .veryMinorTicks,
-.speed .minorTicks,
-.speed .majorTicks {
+.speed .ticks,
+.speed .fuel {
   /* position */
   position: absolute;
   inset: 0;
@@ -33,9 +32,12 @@
   transform: rotate(-45deg);
 }
 
-.speed .veryMinorTicks > *,
-.speed .minorTicks > *,
-.speed .majorTicks > * {
+.speed .fuel {
+  transform: rotate(-115deg);
+}
+
+.speed .ticks > *,
+.speed .fuel > * {
   grid-column: 1;
   grid-row: 1;
 
@@ -51,9 +53,8 @@
   line-height: 1;
 }
 
-.speed .veryMinorTicks > * span,
-.speed .minorTicks > * span,
-.speed .majorTicks > * span {
+.speed .ticks > * span,
+.speed .fuel > * span {
   position: relative;
   z-index: 999;
 
@@ -62,11 +63,35 @@
   /* sizing */
   width: fit-content;
   height: fit-content;
+
+  /* transition */
+  transition: transform 50ms ease-in-out;
 }
 
-.speed .veryMinorTicks > * .tick,
-.speed .minorTicks > * .tick,
-.speed .majorTicks > * .tick {
+.speed .ticks > * span.minorTickLabel {
+  /* text */
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1; 
+  color: rgb(221, 221, 221);
+}
+
+.speed .ticks > * span.majorTickLabel {
+  /* text */
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1; 
+  color: white;
+}
+
+.speed .fuel > * span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.speed .ticks > * .tick,
+.speed .fuel > * .tick {
   /* position */
   position: absolute;
   left: 0;
@@ -82,7 +107,7 @@
   background-color: rgb(141, 141, 141);
 }
 
-.speed .minorTicks > * .tick {
+.speed .minorTick > .tick {
   /* sizing */
   width: 0.5rem;
   height: 1px;
@@ -91,13 +116,31 @@
   background-color: rgb(220, 220, 220);
 }
 
-.speed .majorTicks > * .tick {
+.speed .majorTick > .tick {
   /* sizing */
   width: 0.75rem;
   height: 2px;
 
   /* styling */
   background-color: white;
+}
+
+.speed .fuel > *.majorTick .tick {
+  /* sizing */
+  width: 0.5rem;
+  height: 1px;
+
+  /* styling */
+  background-color: rgb(220, 220, 220);
+}
+
+.speed .fuel > *.minorTick .tick {
+  /* sizing */
+  width: 0.25rem;
+  height: 1px;
+
+  /* styling */
+  background-color: rgb(141, 141, 141);
 }
 
 .speed .needle {
@@ -127,7 +170,8 @@
 
   /* sizing */
   width: 150px;
-  height: 4px;
+  height: 0.125rem;
+  translate: 0 -50%;
 
   /* styling */
   background-color: red;
@@ -181,4 +225,214 @@
   line-height: 1;
   color: white;
   text-transform: uppercase;
+}
+
+.speed .speedometer .limit {
+  /* position */
+  position: absolute;
+  right: 0rem;
+  bottom: 0rem;
+  z-index: 1;
+
+  /* sizing */
+  --_size: 3.25rem;
+  width: var(--_size);
+  height: var(--_size);
+  padding: 0.5rem;
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* text */
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: black;
+
+  /* styling */
+  border-radius: 50%;
+  border: 0.25rem solid red;
+  outline: 0.125rem solid white;
+  background-color: white;
+
+  /* transition */
+  --_transition-duration: 350ms;
+  --_transition-timing-function: ease-in-out;
+  transition: background-color var(--_transition-duration)
+      var(--_transition-timing-function),
+    color var(--_transition-duration) var(--_transition-timing-function),
+    border-color var(--_transition-duration) var(--_transition-timing-function),
+    outline-color var(--_transition-duration) var(--_transition-timing-function);
+}
+
+.speed .speedometer .limit.over {
+  background-color: red;
+  color: white;
+  border-color: white;
+  outline-color: red;
+}
+
+.speed .speedometer .cruise {
+  /* position */
+  position: absolute;
+  left: 0rem;
+  bottom: 0rem;
+  z-index: 1;
+
+  /* sizing */
+  --_size: 3.25rem;
+  width: var(--_size);
+  height: var(--_size);
+  padding: 0.5rem;
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* text */
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: black;
+
+  /* styling */
+  border-radius: 50%;
+  border: 0.25rem solid black;
+  outline: 0.125rem solid white;
+  background-color: white;
+
+  /* transition */
+  --_transition-duration: 350ms;
+  --_transition-timing-function: ease-in-out;
+  transition: background-color var(--_transition-duration)
+      var(--_transition-timing-function),
+    color var(--_transition-duration) var(--_transition-timing-function),
+    border-color var(--_transition-duration) var(--_transition-timing-function),
+    outline-color var(--_transition-duration) var(--_transition-timing-function),
+    opacity var(--_transition-duration) var(--_transition-timing-function);
+  opacity: 0;
+}
+
+.speed .speedometer .cruise.enabled {
+ opacity: 1;
+}
+
+.speed .speedometer .cruise.active {
+ border-color: green;
+}
+
+.speed .cruiseIndicator {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+  transform-origin: center;
+
+  /* sizing */
+  width: 100%;
+
+  /* transition */
+  transition: transform 25ms ease-in-out;
+}
+
+.speed .cruiseIndicator::after {
+  /* content */
+  content: "";
+
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  /* sizing */
+  width: 0.75rem;
+  height: 4px;
+  translate: 0 -50%;
+
+  /* styling */
+  background-color: red;
+  background-color: var(--_background);
+  transition: background 250ms ease-in-out, opacity 250ms ease-in-out, mask 250ms ease-in-out;
+}
+
+.speed .cruiseArcFromNeedle {
+  --_currentSpeed: 10;
+  --_speedCruise: 40;
+  --_maxSpeed: 100;
+  --_maxGaugeAngle: 50deg;
+  
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: center;
+  transform: rotate(-135deg);
+  transition: transform 25ms ease-in-out;
+  pointer-events: none;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+
+  /* styling */
+  border-radius: 50%;
+  background: red;
+  border: 0.25rem solid transparent;
+  mask: linear-gradient(#0000 0 0) padding-box intersect,
+    conic-gradient(
+      #0000 calc((var(--_currentSpeed) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #000 calc((var(--_currentSpeed) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #000 calc((var(--_speedCruise) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #0000 calc((var(--_speedCruise) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100))
+    ),
+    conic-gradient(
+      #0000 calc((var(--_speedCruise) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #000 calc((var(--_speedCruise) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #000 calc((var(--_currentSpeed) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100)),
+      #0000 calc((var(--_currentSpeed) / var(--_maxSpeed) * 100deg) * (var(--_maxGaugeAngle) / 100))
+    );;
+
+  /* transition */
+  transition: background 250ms ease-in-out, opacity 250ms ease-in-out, mask 250ms ease-in-out;
+  opacity: 0;
+}
+
+.speed .fuel .indicatorArc {
+  --_fuel-level: 10;
+  --_maxGaugeAngle: 50deg;
+
+  /* position */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: transform 25ms ease-in-out;
+  pointer-events: none;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+
+  /* styling */
+  border-radius: 50%;
+  background: red;
+  border: 0.25rem solid transparent;
+  mask: linear-gradient(#0000 0 0) padding-box intersect,
+    conic-gradient(
+      #000 calc(var(--_fuel-level) * (var(--_maxGaugeAngle) / 100)),
+      #0000 0
+    );
+
+  /* transition */
+  transition: background 250ms ease-in-out;
 }

@@ -1,139 +1,45 @@
-.speedNight {
+.speed.night {
   background: rgb(0, 0, 0);
 }
 
-.speedNight .veryMinorTicks,
-.speedNight .minorTicks,
-.speedNight .majorTicks {
-  /* position */
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-
-  /* sizing */
-  width: 100%;
-  height: 100%;
-
-  /* grid */
-  display: grid;
-  place-items: center;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  gap: 0.5rem;
-  transform-origin: center;
-  pointer-events: none;
-
-  /* styling */
-  transform: rotate(-45deg);
-}
-
-.speedNight .veryMinorTicks > *,
-.speedNight .minorTicks > *,
-.speedNight .majorTicks > * {
-  grid-column: 1;
-  grid-row: 1;
-
-  /* sizing */
-  --_padding: 1.25rem;
-  width: calc(100% - var(--_padding));
-  padding-left: var(--_padding);
-}
-
-.speedNight .majorTicks > * {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.speedNight .veryMinorTicks > * span,
-.speedNight .minorTicks > * span,
-.speedNight .majorTicks > * span {
-  position: relative;
-  z-index: 999;
-
-  display: block;
-
-  /* sizing */
-  width: fit-content;
-  height: fit-content;
-
-  /* hiding */
-  opacity: 0;
-}
-
-.speedNight .minorTicks > * span {
-  color: rgb(192, 19, 19);
-}
-.speedNight .majorTicks > * span {
+.speed.night .tickLabel {
   color: rgb(214, 0, 0);
 }
 
-.speedNight .veryMinorTicks > *.visible span,
-.speedNight .minorTicks > *.visible span,
-.speedNight .majorTicks > *.visible span {
+.speed.night .minorTick .tickLabel {
+  color: rgb(192, 19, 19);
+}
+
+.speed.night .tick,
+.speed.night .tickLabel {
   /* hiding */
-  opacity: 1;
-}
+  opacity: 0;
 
-.speedNight .veryMinorTicks > * .tick,
-.speedNight .minorTicks > * .tick,
-.speedNight .majorTicks > * .tick {
-  /* position */
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-
-  /* sizing */
-  width: 0.25rem;
-  height: 1px;
-
-  /* styling */
-  background-color: transparent;
+  /* transition */
+  transition: opacity 250ms ease-in-out;
 }
 
 
-.speedNight .veryMinorTicks > *.visible .tick {
+.speed.night .veryMinorTick .tick {
   background-color: rgb(193, 20, 20);
 
 }
 
-.speedNight .minorTicks > *.visible .tick {
-  /* sizing */
-  width: 0.5rem;
-  height: 1px;
-
-  /* styling */
+.speed.night .minorTick .tick {
   background-color: rgb(192, 19, 19);
 }
 
-.speedNight .majorTicks > *.visible .tick {
-  /* sizing */
-  width: 0.75rem;
-  height: 2px;
-
-  /* styling */
+.speed.night .majorTick .tick {
   background-color: rgb(214, 0, 0);
 }
 
-.speedNight .needle {
-  /* position */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  z-index: 1;
-  transform-origin: center;
-
-  /* sizing */
-  width: 100%;
-
-  /* transition */
-  transition: transform 25ms ease-in-out;
+.speed.night .visible .tick,
+.speed.night .visible .tickLabel {
+  /* hiding */
+  opacity: 1;
 }
 
-.speedNight .needle::after {
+.speed.night .needle::after {
   /* content */
   content: "";
 
@@ -150,7 +56,7 @@
   background-color: rgb(214, 0, 0);
 }
 
-.speedNight .speedometer {
+.speed.night .speedometer {
   /* position */
   position: absolute;
   top: 50%;
@@ -173,9 +79,10 @@
   /* styling */
   border-radius: 50%;
   background-color: transparent;
+  border: 2px solid transparent;
 }
 
-.speedNight .speedometer .value {
+.speed.night .speedometer .value {
   /* text */
   font-size: 5rem;
   font-weight: 700;
@@ -183,7 +90,7 @@
   color: rgb(214, 0, 0);
 }
 
-.speedNight .speedometer .unit {
+.speed.night .speedometer .unit {
   /* position */
   position: absolute;
   bottom: 2.5rem;
@@ -197,4 +104,23 @@
   line-height: 1;
   color: rgb(192, 19, 19);;
   text-transform: uppercase;
+}
+
+.speed.night .speedometer .limit,
+.speed.night .speedometer .cruise {
+  outline: none;
+  background-color: transparent;
+  color: red;
+}
+
+.speed.night .speedometer .limit.over {
+  border-color: rgb(255, 153, 0);
+}
+
+.speed.night .speedometer .cruise.enabled {
+  border-color: rgb(255, 153, 0);
+}
+
+.speed.night .speedometer .cruise.active {
+  border-color: red;
 }

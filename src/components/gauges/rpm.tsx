@@ -1,15 +1,19 @@
 import { useState } from "react";
 import "../../styles/gauges/rpm.css";
+import { useAtom, useAtomValue } from "jotai";
+import { gearAtom, rpmAtom, rpmSettingsAtom } from "../../Gauge";
 
 export function RPMGauge(props: { current: boolean }) {
-  const [rpm, setRPM] = useState(40);
+  const [rpm, setRPM] = useAtom(rpmAtom);
   const [maxRPM, setMaxRPM] = useState(0);
   const [prevRPM, setPrevRPM] = useState(0);
-  const MajorTickRate = 1000;
-  const MinorTickRate = 100;
-  const MaxDialRPM = 8000;
-  const MaxDialAngle = 270;
-  const RedlineRPM = 6500;
+  const rpmSettings = useAtomValue(rpmSettingsAtom);
+  const gear = useAtomValue(gearAtom);
+  const MajorTickRate = rpmSettings.MajorTickRate;
+  const MinorTickRate = rpmSettings.MinorTickRate;
+  const MaxDialAngle = rpmSettings.MaxDialAngle;
+  const RedlineRPM = rpmSettings.RedlineRPM;
+  const MaxDialRPM = rpmSettings.MaxDialRPM;
 
   const handleRPMChange = (newRPM: number) => {
     setPrevRPM(rpm);
@@ -42,35 +46,35 @@ export function RPMGauge(props: { current: boolean }) {
         {Array.from({ length: MaxDialRPM / MinorTickRate }, (_, i) => {
           const angle = ((i * MinorTickRate) / MaxDialRPM) * MaxDialAngle;
           if ((i * MinorTickRate) % MajorTickRate === 0) return null; // Skip numbers matching the major ticks
-            const isRedline = (i * MinorTickRate) >= RedlineRPM;
-            return (
+          const isRedline = i * MinorTickRate >= RedlineRPM;
+          return (
             <div
               key={i}
               className="minorTick"
               style={{
-              transform: `rotate(${angle}deg)`,
+                transform: `rotate(${angle}deg)`,
               }}
             >
               <div className={`tick ${isRedline ? "redline" : ""}`} />
             </div>
-            );
+          );
         })}
       </div>
       <div className="majorTicks">
         {Array.from({ length: MaxDialRPM / MajorTickRate + 1 }, (_, i) => {
           const angle = ((i * MajorTickRate) / MaxDialRPM) * MaxDialAngle;
-          const isRedline = (i * MajorTickRate) >= RedlineRPM;
+          const isRedline = i * MajorTickRate >= RedlineRPM;
           return (
-        <div
-          key={i}
-          className={`majorTick ${isRedline ? "redline" : ""}`}
-          style={{ transform: `rotate(${angle}deg)` }}
-        >
-          <span style={{ transform: `rotate(${-angle + 45}deg)` }}>
-            {(i * MajorTickRate) / 1000}
-          </span>
-          <div className={`tick ${isRedline ? "redline" : ""}`} />
-        </div>
+            <div
+              key={i}
+              className={`majorTick ${isRedline ? "redline" : ""}`}
+              style={{ transform: `rotate(${angle}deg)` }}
+            >
+              <span style={{ transform: `rotate(${-angle + 45}deg)` }}>
+                {(i * MajorTickRate) / 1000}
+              </span>
+              <div className={`tick ${isRedline ? "redline" : ""}`} />
+            </div>
           );
         })}
       </div>
@@ -93,10 +97,17 @@ export function RPMGauge(props: { current: boolean }) {
         }}
       />
 
-      <div className="rpmometer">
-        <span className="value">{Math.ceil(rpm / 100) * 100}</span>
-        <span className="unit">RPM x1000</span>
-      </div>
+      {!rpmSettings.showGear && (
+        <div className="rpmometer">
+          <span className="value">{Math.ceil(rpm / 100) * 100}</span>
+          <span className="unit">RPM x1000</span>
+        </div>
+      )}
+      {rpmSettings.showGear && (
+        <div className="gear">
+          <span className="value">{gear}</span>
+        </div>
+      )}
     </div>
   );
 }

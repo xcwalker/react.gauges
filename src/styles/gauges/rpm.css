@@ -3,7 +3,7 @@
   background: radial-gradient(
     circle,
     rgba(0, 0, 0, 1) 0%,
-    rgba(9, 9, 121, 1) 40%,
+    var(--_accent) 40%,
     rgba(0, 0, 0, 1) 74%
   );
 }
@@ -125,13 +125,15 @@
 
   /* sizing */
   width: 125px;
-  height: 4px;
+  height: 0.125rem;
+  translate: 0 -50%;
 
   /* styling */
   background-color: red;
 }
 
-.rpm .rpmometer {
+.rpm .rpmometer,
+.rpm .gear {
   /* position */
   position: absolute;
   top: 50%;
@@ -157,7 +159,8 @@
   border: 2px solid white;
 }
 
-.rpm .rpmometer .value {
+.rpm .rpmometer .value,
+.rpm .gear .value {
   /* text */
   font-size: 4rem;
   font-weight: 700;
