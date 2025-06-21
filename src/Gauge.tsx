@@ -7,7 +7,8 @@ import { GaugeSetup } from "./components/gauges/setup";
 import "../../styles/gauges.css";
 import { SpeedGauge } from "./components/gauges/speed";
 import { RPMGauge } from "./components/gauges/rpm";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
+import { fuelAtom, gearAtom, rpmAtom, rpmSettingsAtom, speedAtom, speedCruiseActiveAtom, speedCruiseAtom, speedCruiseEnableAtom, speedLimitAtom, speedSettingsAtom } from "./atoms";
 
 function Gauge() {
   const [speed, setSpeed] = useAtom(speedAtom);
@@ -271,32 +272,3 @@ function Gauge() {
 }
 
 export default Gauge;
-
-export const rpmAtom = atom(1200);
-export const speedCruiseAtom = atom<number | undefined>(undefined);
-export const speedCruiseEnableAtom = atom(true);
-export const speedCruiseActiveAtom = atom(true);
-export const speedAtom = atom(40);
-export const speedLimitAtom = atom(70);
-
-export const speedSettingsAtom = atom({
-  MajorTickRate: 10,
-  MinorTickRate: 5,
-  VeryMinorTickRate: 1,
-  MaxDialSpeed: 120,
-  MaxDialAngle: 270,
-  scaleTickLabels: true,
-});
-
-export const rpmSettingsAtom = atom({
-  MajorTickRate: 1000,
-  MinorTickRate: 100,
-  MaxDialRPM: 8000,
-  MaxDialAngle: 270,
-  RedlineRPM: 6500,
-  showGear: true,
-});
-
-export const fuelAtom = atom(40);
-
-export const gearAtom = atom<number | "P" | "R" | "N" | "D">(1);
