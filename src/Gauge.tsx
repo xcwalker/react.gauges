@@ -4,7 +4,7 @@ import { WeatherGauge } from "./components/gauges/weather";
 import { TripGauge } from "./components/gauges/trip";
 import { GaugeSetup } from "./components/gauges/setup";
 
-import "../../styles/gauges.css";
+import "./styles/gauges.css";
 import { SpeedGauge } from "./components/gauges/speed";
 import { RPMGauge } from "./components/gauges/rpm";
 import { useAtom } from "jotai";

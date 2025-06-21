@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import "../../styles/gauges/speed.css";
 import "../../styles/gauges/speed_night.css";
 import { useAtom, useAtomValue } from "jotai";
-import {
-  fuelAtom,
-  speedAtom,
-  speedCruiseActiveAtom,
-  speedCruiseAtom,
-  speedCruiseEnableAtom,
-  speedLimitAtom,
-  speedSettingsAtom,
-} from "../../Gauge";
+import { fuelAtom, speedAtom, speedCruiseActiveAtom, speedCruiseAtom, speedCruiseEnableAtom, speedLimitAtom, speedSettingsAtom } from "../../atoms";
 
 export function SpeedGauge(props: { current: boolean; mode?: string }) {
   const [speed, setSpeed] = useAtom(speedAtom);

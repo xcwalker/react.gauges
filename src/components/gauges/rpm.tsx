@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../../styles/gauges/rpm.css";
 import { useAtom, useAtomValue } from "jotai";
-import { gearAtom, rpmAtom, rpmSettingsAtom } from "../../Gauge";
+import { gearAtom, rpmAtom, rpmSettingsAtom } from "../../atoms";
 
 export function RPMGauge(props: { current: boolean }) {
   const [rpm, setRPM] = useAtom(rpmAtom);
