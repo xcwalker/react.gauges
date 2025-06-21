@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import "../../styles/gauges/speed.css";
-import "../../styles/gauges/speed_night.css";
+import "../../styles/gauges/speed_round.css";
+import "../../styles/gauges/speed_round_night.css";
 import { useAtom, useAtomValue } from "jotai";
-import { fuelAtom, speedAtom, speedCruiseActiveAtom, speedCruiseAtom, speedCruiseEnableAtom, speedLimitAtom, speedSettingsAtom } from "../../atoms";
+import {
+  fuelAtom,
+  speedAtom,
+  speedCruiseActiveAtom,
+  speedCruiseAtom,
+  speedCruiseEnableAtom,
+  speedLimitAtom,
+  speedSettingsAtom,
+} from "../../atoms";
 
-export function SpeedGauge(props: { current: boolean; mode?: string }) {
+export function SpeedRoundGauge(props: { current?: boolean; mode?: "night" | "day" }) {
   const [speed, setSpeed] = useAtom(speedAtom);
   const speedSettings = useAtomValue(speedSettingsAtom);
   const speedLimit = useAtomValue(speedLimitAtom);
@@ -14,11 +22,6 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
   const fuel = useAtomValue(fuelAtom);
   const [maxSpeed, setMaxSpeed] = useState(0);
   const [prevSpeed, setPrevSpeed] = useState(0);
-  const MajorTickRate = 10;
-  const MinorTickRate = 5;
-  const VeryMinorTickRate = 1;
-  const MaxDialSpeed = 120;
-  const MaxDialAngle = 270;
 
   const handleSpeedChange = (newSpeed: number) => {
     setPrevSpeed(speed);
@@ -30,11 +33,11 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
 
   const sweepStart = async () => {
     handleSpeedChange(0);
-    for (let i = 0; i <= MaxDialSpeed; i++) {
+    for (let i = 0; i <= speedSettings.MaxDialSpeed; i++) {
       handleSpeedChange(i);
       await new Promise((resolve) => setTimeout(resolve, 10));
     }
-    for (let i = MaxDialSpeed; i >= 0; i--) {
+    for (let i = speedSettings.MaxDialSpeed; i >= 0; i--) {
       handleSpeedChange(i);
       await new Promise((resolve) => setTimeout(resolve, 10));
     }
@@ -45,22 +48,39 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
     <div
       className={
         "speed" +
-        (props.current ? " current" : "") +
+        (props.current === undefined || props.current ? " current" : "") +
         (props.mode === "night" ? " night" : "")
       }
       onClick={sweepStart}
     >
       <div className="ticks">
         {Array.from(
-          { length: MaxDialSpeed / VeryMinorTickRate + 1 },
+          {
+            length:
+              speedSettings.MaxDialSpeed / speedSettings.VeryMinorTickRate + 1,
+          },
           (_, i) => {
             const angle =
-              ((i * VeryMinorTickRate) / MaxDialSpeed) * MaxDialAngle;
+              ((i * speedSettings.VeryMinorTickRate) /
+                speedSettings.MaxDialSpeed) *
+              speedSettings.MaxDialAngle;
 
-            const isMinorTick = (i * VeryMinorTickRate) % MinorTickRate === 0;
-            const isMajorTick = (i * VeryMinorTickRate) % MajorTickRate === 0;
+            const isMinorTick =
+              (i * speedSettings.VeryMinorTickRate) %
+                speedSettings.MinorTickRate ===
+              0;
+            const isMajorTick =
+              (i * speedSettings.VeryMinorTickRate) %
+                speedSettings.MajorTickRate ===
+              0;
 
-            const isVisible = i < Math.ceil((Math.max(speed, speedCruise ? speedCruise : 0) + 1) / 5) * 5 + 1 || i < 31;
+            const isVisible =
+              i <
+                Math.ceil(
+                  (Math.max(speed, speedCruise ? speedCruise : 0) + 1) / 5
+                ) *
+                  5 +
+                  1 || i < 31;
 
             return (
               <div
@@ -90,7 +110,11 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
                                 Math.max(
                                   0,
                                   1 -
-                                    Math.abs(speed - i * VeryMinorTickRate) / 5
+                                    Math.abs(
+                                      speed -
+                                        i * speedSettings.VeryMinorTickRate
+                                    ) /
+                                      5
                                 ) *
                                   0.5,
                               1.5
@@ -99,7 +123,7 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
                       })`,
                     }}
                   >
-                    {i * VeryMinorTickRate}
+                    {i * speedSettings.VeryMinorTickRate}
                   </span>
                 )}
                 <div className="tick" />
@@ -111,7 +135,10 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
       <div
         className="needle"
         style={{
-          transform: `rotate(${(speed / MaxDialSpeed) * MaxDialAngle - 45}deg)`,
+          transform: `rotate(${
+            (speed / speedSettings.MaxDialSpeed) * speedSettings.MaxDialAngle -
+            45
+          }deg)`,
         }}
       />
       <div
@@ -119,7 +146,8 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
         style={
           {
             transform: `rotate(${
-              ((speedCruise ? speedCruise : 0) / MaxDialSpeed) * MaxDialAngle -
+              ((speedCruise ? speedCruise : 0) / speedSettings.MaxDialSpeed) *
+                speedSettings.MaxDialAngle -
               45
             }deg)`,
             "--_background":
@@ -139,8 +167,8 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
           {
             "--_currentSpeed": speed,
             "--_speedCruise": speedCruise ? speedCruise : 0,
-            "--_maxSpeed": MaxDialSpeed,
-            "--_maxGaugeAngle": MaxDialAngle,
+            "--_maxSpeed": speedSettings.MaxDialSpeed,
+            "--_maxGaugeAngle": speedSettings.MaxDialAngle,
             background:
               (speedCruise ? speedCruise : 0) > speed
                 ? props.mode !== "night"
@@ -156,7 +184,9 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
         className="maxNeedle"
         style={{
           transform: `rotate(${
-            (maxSpeed / MaxDialSpeed) * MaxDialAngle - 45
+            (maxSpeed / speedSettings.MaxDialSpeed) *
+              speedSettings.MaxDialAngle -
+            45
           }deg)`,
         }}
       />
@@ -164,7 +194,9 @@ export function SpeedGauge(props: { current: boolean; mode?: string }) {
         className="prevNeedle"
         style={{
           transform: `rotate(${
-            (prevSpeed / MaxDialSpeed) * MaxDialAngle - 45
+            (prevSpeed / speedSettings.MaxDialSpeed) *
+              speedSettings.MaxDialAngle -
+            45
           }deg)`,
         }}
       />

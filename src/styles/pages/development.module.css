@@ -1,0 +1,8 @@
+.gallery {}
+
+.gallery .gauges {
+  /* flex */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

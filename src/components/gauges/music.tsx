@@ -1,8 +1,13 @@
-import "../../styles/gauges/music.css"
+import "../../styles/gauges/music.css";
 
-export function MusicGauge(props: { current: boolean }) {
+export function MusicGauge(props: { current?: boolean }) {
   return (
-    <div className={"music " + (props.current ? "current" : "")}>
+    <div
+      className={
+        "music " +
+        (props.current === undefined || props.current ? " current" : "")
+      }
+    >
       <img src={musicInfo.imageURL} alt="" className="background" />
       <img src={musicInfo.imageURL} alt="" className="image" />
       <div className="info">
@@ -28,7 +33,7 @@ export function MusicGauge(props: { current: boolean }) {
       </div>
     </div>
   );
-} 
+}
 
 const musicInfo = {
   imageURL: "https://i.scdn.co/image/f7a77846ac8a88f49145850d88fdd6bf33944773",

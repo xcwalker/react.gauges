@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../styles/gauges/weather.css";
 import GFIcon from "../GFIcon";
 
-export function WeatherGauge(props: { current: boolean }) {
+export function WeatherGauge(props: { current?: boolean }) {
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -32,7 +32,12 @@ export function WeatherGauge(props: { current: boolean }) {
   }, []);
 
   return (
-    <div className={"weather " + (props.current ? "current" : "")}>
+    <div
+      className={
+        "weather" +
+        (props.current === undefined || props.current ? " current" : "")
+      }
+    >
       <div className="rain night" />
       <GFIcon className="icon">rainy</GFIcon>
       <div className="location">
@@ -44,7 +49,9 @@ export function WeatherGauge(props: { current: boolean }) {
         <span className="temperature">15°C</span>
       </div>
       <div className="clock">
-        <span className="time">{pad(date.getUTCHours(), 2)}:{pad(date.getUTCMinutes(), 2)}</span>
+        <span className="time">
+          {pad(date.getUTCHours(), 2)}:{pad(date.getUTCMinutes(), 2)}
+        </span>
         <span className="date">23/10/25</span>
       </div>
     </div>

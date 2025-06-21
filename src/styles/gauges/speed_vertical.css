@@ -1,0 +1,236 @@
+.speed_vertical {
+  /* position */
+  position: relative;
+
+  /* sizing */
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  --_transition_duration: 25ms;
+  --_transition_timing: ease-in-out;
+}
+
+.speed_vertical .speedometer {
+  /* position */
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  translate: 0 -50%;
+  z-index: 4;
+
+  /* flex */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+
+  /* styling */
+  border-radius: 50%;
+  background-color: var(--gauge-background);
+}
+
+.speed_vertical .speedometer .value {
+  /* sizing */
+  width: 90px;
+  padding: 0.25rem 0.5rem;
+
+  /* text */
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gauge-text-color);
+  text-align: end;
+
+  /* styling */
+  border: 2px solid var(--gauge-accent);
+  border-radius: 0.5rem;
+}
+
+.speed_vertical .speedometer .unit {
+  /* position */
+  position: absolute;
+  top: 50%;
+  right: calc(-3ch - 1.25rem);
+  translate: 0 -50%;
+  z-index: 1;
+
+  /* sizing */
+  padding: 0.25rem 0.5rem;
+
+  /* text */
+  font-size: 0.75rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gauge-text-color);
+  text-transform: uppercase;
+
+  /* styling */
+  background-color: var(--gauge-accent);
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.speed_vertical .speed_indicator {
+  /* position */
+  position: absolute;
+  top: 50%;
+  right: 0;
+  translate: 0 -50%;
+  z-index: 3;
+
+  /* sizing */
+  width: 40%;
+  height: 0.25rem;
+
+  /* styling */
+  background-color: var(--gauge-accent);
+}
+
+.speed_vertical .speed_indicator_limit {
+  /* position */
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  translate: 0 calc((var(--_current-speed) - var(--_limit_speed)) * -1.25rem);
+  transition: translate var(--_transition_duration) var(--_transition_timing);
+  z-index: 1;
+
+  /* sizing */
+  width: 50%;
+  height: 0.25rem;
+
+  /* styling */
+  background-color: red;
+}
+
+.speed_vertical .speed_indicator_cruise {
+  /* position */
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  translate: 0 calc((var(--_current-speed) - var(--_cruise_speed)) * -1.25rem);
+  z-index: 1;
+
+  /* sizing */
+  width: 50%;
+  height: 0.25rem;
+
+  /* styling */
+  background-color: white;
+  opacity: 0;
+  transition: translate var(--_transition_duration) var(--_transition_timing), opacity var(--_transition_duration) var(--_transition_timing);
+}
+
+.speed_vertical .speed_indicator_cruise.enabled {
+  opacity: 1;
+}
+
+.speed_vertical .speed_indicator_cruise.active {
+  background-color: green;
+}
+
+.speed_vertical .ticks {
+  /* position */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(50%);
+  translate: 0 calc(var(--_current-speed) * -1.25rem);
+  transition: translate var(--_transition_duration) var(--_transition_timing);
+
+  /* flexbox */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.speed_vertical .ticks > * {
+  /* position */
+  position: relative;
+
+  /* sizing */
+  width: 50%;
+  min-height: 0.25rem;
+  translate: 0 -50%;
+}
+
+.speed_vertical .ticks > * .tick {
+  /* position */
+  position: absolute;
+  right: 0;
+
+  /* sizing */
+  width: 100%;
+  margin-block: var(--_spacing, 0);
+  height: calc(100% - (var(--_spacing, 0) * 2));
+}
+
+.speed_vertical .ticks .veryMinorTick .tickLabel {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: -3rem;
+  translate: 0 -50%;
+
+  /* text */
+  color: rgb(141, 141, 141);
+}
+
+.speed_vertical .ticks .minorTick .tickLabel {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: -3rem;
+  translate: 0 -50%;
+
+  /* text */
+  font-size: 1.25rem;
+  color: rgb(86, 86, 86);
+}
+
+.speed_vertical .ticks .majorTick .tickLabel {
+  /* position */
+  position: absolute;
+  top: 50%;
+  left: -3rem;
+  translate: 0 -50%;
+
+  /* text */
+  font-size: 1.5rem;
+  color: rgb(0, 0, 0);
+}
+
+.speed_vertical .ticks .veryMinorTick .tick {
+  /* sizing */
+  width: 33%;
+  --_spacing: 1.5px;
+
+  /* styling */
+  background-color: rgb(141, 141, 141);
+}
+
+.speed_vertical .ticks .minorTick .tick {
+  /* sizing */
+  width: 66%;
+  --_spacing: 0.75px;
+
+  /* styling */
+  background-color: rgb(141, 141, 141);
+}
+
+.speed_vertical .ticks .majorTick .tick {
+  /* sizing */
+  width: 100%;
+  --_spacing: 0px;
+
+  /* styling */
+  background-color: rgb(0, 0, 0);
+}

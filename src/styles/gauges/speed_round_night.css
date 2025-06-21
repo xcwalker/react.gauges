@@ -109,7 +109,7 @@
 .speed.night .speedometer .limit,
 .speed.night .speedometer .cruise {
   outline: none;
-  background-color: transparent;
+  background: rgb(0, 0, 0);
   color: red;
 }
 

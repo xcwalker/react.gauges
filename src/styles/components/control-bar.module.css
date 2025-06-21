@@ -1,0 +1,32 @@
+.controlBar {
+  /* position */
+  position: fixed;
+  inset: 0.5rem;
+  top: calc(52px + 0.5rem); /* Adjusting for header height */
+  bottom: auto;
+
+  /* sizing */
+  width: calc(100% - 1rem);
+  padding: 0.5rem 1.5rem;
+
+  /* styling */
+  background-color: var(--controls-bg-color);
+  color: var(--controls-text-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.controlBar .controls {
+  /* sizing */
+  width: 100%;
+  height: 100%;
+
+  /* flexbox */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

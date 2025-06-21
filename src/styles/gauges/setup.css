@@ -1,4 +1,4 @@
-.gauge {
+.gauge_round {
   /* position */
   position: relative;
 
@@ -12,11 +12,10 @@
   background-color: black;
   overflow: hidden;
   pointer-events: none;
-
-  --_accent: rgba(9, 9, 121, 1);
 }
 
-.gauge > * {
+.gauge_round > *,
+.gauge_vertical > * {
   /* position */
   position: absolute;
   inset: 0;
@@ -31,7 +30,12 @@
   transition: opacity 0.5s ease-in-out;
 }
 
-.gauge > *.current {
+.gauge_round > *.current,
+.gauge_vertical > *.current {
   opacity: 1;
   pointer-events: auto;
+}
+
+.gauge_vertical {
+
 }

@@ -3,7 +3,7 @@ import "../../styles/gauges/rpm.css";
 import { useAtom, useAtomValue } from "jotai";
 import { gearAtom, rpmAtom, rpmSettingsAtom } from "../../atoms";
 
-export function RPMGauge(props: { current: boolean }) {
+export function RPMGauge(props: { current?: boolean }) {
   const [rpm, setRPM] = useAtom(rpmAtom);
   const [maxRPM, setMaxRPM] = useState(0);
   const [prevRPM, setPrevRPM] = useState(0);
@@ -35,11 +35,13 @@ export function RPMGauge(props: { current: boolean }) {
       await new Promise((resolve) => setTimeout(resolve, 1));
     }
     handleRPMChange(0);
-  }
+  };
 
   return (
     <div
-      className={"rpm " + (props.current ? "current" : "")}
+      className={
+        "rpm" + (props.current === undefined || props.current ? " current" : "")
+      }
       onClick={sweepStart}
     >
       <div className="minorTicks">

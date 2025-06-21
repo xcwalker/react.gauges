@@ -1,0 +1,9 @@
+:root {
+  --header-bg-color: #bd002c;
+  --header-text-color: #ffffff;
+
+  --controls-bg-color: #181818;
+  --controls-text-color: #f0f0f0;
+
+  --gauge-accent: rgba(9, 9, 121, 1);
+}
