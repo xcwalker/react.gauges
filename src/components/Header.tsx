@@ -34,12 +34,11 @@ export default function Header() {
             </button>
           </nav>
         </div>
+        {showControls && <ControlBar />}
       </header>
-      {showControls && <ControlBar />}
     </>
   );
 }
-
 
 function NavLinkInternal({
   to,

@@ -1,27 +1,33 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { StrictMode, Suspense } from "react";
+import { createRoot } from "react-dom/client";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import "./styles/fonts.css"
+import "./styles/fonts.css";
 import "./styles/defaults/setup.css";
 import "./styles/defaults/page-setup.css";
 import "./styles/defaults/transitions.css";
 import "./styles/defaults/variables.css";
 
-import Example from './pages/Example.tsx'
-import Gallery from './pages/Gallery.tsx';
-import Header from './components/Header.tsx';
-import Development from './pages/Development.tsx';
+import Example from "./pages/Example.tsx";
+import Gallery from "./pages/Gallery.tsx";
+import Header from "./components/Header.tsx";
+import Development from "./pages/Development.tsx";
+import Footer from "./components/Footer.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Router>
       <Header />
-      <Routes>
-        <Route index element={<Gallery />} />
-        <Route path="example" element={<Example />} />
-        <Route path="development" element={<Development />} />
-      </Routes>
+      <main>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route index element={<Gallery />} />
+            <Route path="example" element={<Example />} />
+            <Route path="development" element={<Development />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
     </Router>
   </StrictMode>
 );

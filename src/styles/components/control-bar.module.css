@@ -1,12 +1,13 @@
 .controlBar {
   /* position */
-  position: fixed;
-  inset: 0.5rem;
-  top: calc(52px + 0.5rem); /* Adjusting for header height */
+  position: absolute;
+  inset: 0rem; /* Restoring inset property */
+  top: calc(52px ); 
+  /* Adjusting for header height */
   bottom: auto;
 
   /* sizing */
-  width: calc(100% - 1rem);
+  width: calc(100%);
   padding: 0.5rem 1.5rem;
 
   /* styling */
